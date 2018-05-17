@@ -1,7 +1,9 @@
 package com.ms.interview.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ms.interview.entity.Billing;
+import com.ms.interview.entity.BillingId;
+import com.ms.interview.entity.Invoice;
 import com.ms.interview.entity.MedicineData;
+import com.ms.interview.repository.BillingRepository;
+import com.ms.interview.service.BillingService;
+import com.ms.interview.service.InvoiceService;
 import com.ms.interview.service.MedicineDataService;
 
 @Controller
@@ -21,6 +29,15 @@ public class MainController {
 
 	@Autowired
 	MedicineDataService medicineDataService;
+
+	@Autowired
+	InvoiceService invoiceService;
+	
+	@Autowired
+	BillingService billingService;
+	
+	@Autowired
+	BillingRepository billingRepository;
 
 	@PostMapping(path = "/add")
 	public @ResponseBody String addNewMedicine(@RequestBody MedicineData medicineData) {
@@ -33,23 +50,31 @@ public class MainController {
 	}
 
 	@PostMapping(path = "/buy")
-	public @ResponseBody String addNewMedicine(@RequestBody List<MedicineData> buyMedicineData) {
+	public @ResponseBody Invoice buyMedicine(@RequestBody List<MedicineData> buyMedicineData) {
 
+		List<Billing> medicineBilling = new ArrayList<>();
+		double billingAmt = 0;
 		boolean buySuccess = false;
 		List<MedicineData> updatedMedicineDataList = new ArrayList<>();
-		for(MedicineData medData : buyMedicineData) {
+		for (MedicineData medData : buyMedicineData) {
 
 			MedicineData medicineDataDB = null;
 			medicineDataDB = medicineDataService.getMedicineByBrandName(medData);
 
 			if (medicineDataDB != null) {
-				
-				if(medicineDataDB.getQuantity() >= medData.getQuantity()) {
+
+				if (medicineDataDB.getQuantity() >= medData.getQuantity()) {
 					buySuccess = true;
 					medicineDataDB.setQuantity(medicineDataDB.getQuantity() - medData.getQuantity());
+					billingAmt += medData.getQuantity() * medicineDataDB.getPrice();
 					updatedMedicineDataList.add(medicineDataDB);
-				}
-				else {
+
+					Billing billing = new Billing();
+					billing.setBillingId(new BillingId("", medicineDataDB.getId()));
+					billing.setQuantity(medData.getQuantity());
+					medicineBilling.add(billing);
+
+				} else {
 					updatedMedicineDataList.clear();
 					buySuccess = false;
 					break;
@@ -61,13 +86,28 @@ public class MainController {
 			}
 		}
 
-		if(buySuccess) {
+		if (buySuccess) {
+
+			Invoice invoice = new Invoice();
+			invoice.setInvoiceNo(UUID.randomUUID().toString());
+			invoice.setInvoiceDate(new Date());
+			invoice.setBillingAmount(billingAmt);
 			
+			medicineBilling.stream().forEach(bill->{
+				
+				BillingId billId = bill.getBillingId();
+				billId.setInvoiceNo(invoice.getInvoiceNo());
+				bill.setBillingId(billId);
+			});
+			//invoice.setMedicineBilling(medicineBilling);
+			
+			invoiceService.saveInvoice(invoice);
+			billingService.saveBill(medicineBilling);
 			medicineDataService.saveAll(updatedMedicineDataList);
-			return "Invoice : 1234";
-		}
-		else {
-			return "Medicine quantity not available";
+			
+			return invoice;
+		} else {
+			return null;
 		}
 	}
 
@@ -80,6 +120,11 @@ public class MainController {
 	@GetMapping(path = "/all")
 	public @ResponseBody Iterable<MedicineData> getAllMedicines() {
 		return medicineDataService.getAllMedicine();
+	}
+	
+	@GetMapping(path = "/allBills")
+	public @ResponseBody Iterable<Billing> getAllBills() {
+		return billingRepository.findAll();
 	}
 
 	@GetMapping(path = "/getMedicineByName")

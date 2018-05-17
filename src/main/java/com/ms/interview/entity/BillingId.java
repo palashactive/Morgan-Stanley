@@ -24,11 +24,11 @@ public class BillingId implements Serializable {
 		this.medicineId = medicineId;
 	}
 
-	public String getInvoiceId() {
+	public String getInvoiceNo() {
 		return invoiceNo;
 	}
 
-	public void setInvoiceId(String invoiceNo) {
+	public void setInvoiceNo(String invoiceNo) {
 		this.invoiceNo = invoiceNo;
 	}
 
