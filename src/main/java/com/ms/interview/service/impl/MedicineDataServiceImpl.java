@@ -11,10 +11,10 @@ import com.ms.interview.service.MedicineDataService;
 
 @Service
 public class MedicineDataServiceImpl implements MedicineDataService {
-	
+
 	@Autowired // This means to get the bean called medicineDataRepository
 	private MedicineDataRepository medicineDataRepository;
-	
+
 	@Override
 	public Iterable<MedicineData> getAllMedicine() {
 
@@ -26,17 +26,34 @@ public class MedicineDataServiceImpl implements MedicineDataService {
 
 		return medicineDataRepository.findOne(id);
 	}
-	
+
 	@Override
-	public Iterable<MedicineData> setup(List<MedicineData> medicineDataList){
-		
+	public Iterable<MedicineData> setup(List<MedicineData> medicineDataList) {
+
 		return medicineDataRepository.save(medicineDataList);
 	}
-	
+
 	@Override
 	public MedicineData saveMedicine(MedicineData medicineData) {
-		
+
 		return medicineDataRepository.save(medicineData);
 	}
 
+	@Override
+	public List<MedicineData> getMedicines(String attributeValue, String attribute) {
+
+		if (attribute.equals("Name")) {
+			return medicineDataRepository.findByName(attributeValue);
+		}
+
+		else if (attribute.equals("GenericName")) {
+			return medicineDataRepository.findByGenericName(attributeValue);
+		}
+
+		else if (attribute.equals("Category")) {
+			return medicineDataRepository.findByCategory(attributeValue);
+		}
+
+		return null;
+	}
 }

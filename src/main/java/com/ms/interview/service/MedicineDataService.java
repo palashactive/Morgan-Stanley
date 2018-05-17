@@ -10,6 +10,8 @@ public interface MedicineDataService {
 	
 	public MedicineData getMedicineById(String id);
 	
+	public List<MedicineData> getMedicines(String name, String attribute);
+	
 	public Iterable<MedicineData> setup(List<MedicineData> medicineDataList);
 	
 	public MedicineData saveMedicine(MedicineData medicineData);

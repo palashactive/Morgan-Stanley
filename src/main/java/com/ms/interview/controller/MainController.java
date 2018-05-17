@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ms.interview.entity.MedicineData;
@@ -20,7 +21,7 @@ public class MainController {
 	@Autowired
 	MedicineDataService medicineDataService;
 
-	@PostMapping(path = "/add") // Map ONLY GET Requests
+	@PostMapping(path = "/add")
 	public @ResponseBody String addNewMedicine(@RequestBody MedicineData medicineData) {
 		
 		MedicineData savedMedicine = medicineDataService.saveMedicine(medicineData);
@@ -30,7 +31,7 @@ public class MainController {
 			return "Error";
 	}
 
-	@PostMapping(path = "/setup") // Map ONLY POST Requests
+	@PostMapping(path = "/setup")
 	public @ResponseBody Iterable<MedicineData> setup(@RequestBody List<MedicineData> setupData) {
 
 		return medicineDataService.setup(setupData);
@@ -38,8 +39,21 @@ public class MainController {
 
 	@GetMapping(path = "/all")
 	public @ResponseBody Iterable<MedicineData> getAllMedicines() {
-		// This returns a JSON or XML all medicine
 		return medicineDataService.getAllMedicine();
 	}
-
+	
+	@GetMapping(path = "/getMedicineByName")
+	public @ResponseBody List<MedicineData> getMedicinesByName(@RequestParam String name) {
+		return medicineDataService.getMedicines(name, "Name");
+	}
+	
+	@GetMapping(path = "/getMedicineByGenericName")
+	public @ResponseBody List<MedicineData> getMedicinesByGenericName(@RequestParam String genericName) {
+		return medicineDataService.getMedicines(genericName, "GenericName");
+	}
+	
+	@GetMapping(path = "/getMedicineByCategory")
+	public @ResponseBody List<MedicineData> getMedicinesByCategory(@RequestParam String category) {
+		return medicineDataService.getMedicines(category, "Category");
+	}
 }

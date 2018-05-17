@@ -1,5 +1,7 @@
 package com.ms.interview.repository;
 
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
 
 import com.ms.interview.entity.MedicineData;
@@ -9,4 +11,7 @@ import com.ms.interview.entity.MedicineData;
 
 public interface MedicineDataRepository extends CrudRepository<MedicineData, String> {
 
+	List<MedicineData> findByName(String name);
+	List<MedicineData> findByGenericName(String genericName);
+	List<MedicineData> findByCategory(String category);
 }
