@@ -12,7 +12,9 @@ public interface MedicineDataService {
 	
 	public List<MedicineData> getMedicines(String name, String attribute);
 	
-	public Iterable<MedicineData> setup(List<MedicineData> medicineDataList);
+	public Iterable<MedicineData> saveAll(List<MedicineData> medicineDataList);
 	
 	public MedicineData saveMedicine(MedicineData medicineData);
+	
+	public MedicineData getMedicineByBrandName(MedicineData medicineData);
 }

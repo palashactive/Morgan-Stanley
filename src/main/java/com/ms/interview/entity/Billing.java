@@ -1,27 +1,30 @@
 package com.ms.interview.entity;
 
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+
+@Entity
 public class Billing {
 	
-	private String invoiceId;
-	
-	private String medicineId;
+	@EmbeddedId
+	private BillingId billingId;
 	
 	private Integer quantity;
+	
+	@ManyToOne
+    //@JoinColumn(name = "invoiceNo", referencedColumnName = "invoiceNo")
+    private Invoice invoice;
+	
+	@ManyToOne
+	private MedicineData medicineData;
 
-	public String getInvoiceId() {
-		return invoiceId;
+	public BillingId getBillingId() {
+		return billingId;
 	}
 
-	public void setInvoiceId(String invoiceId) {
-		this.invoiceId = invoiceId;
-	}
-
-	public String getMedicineId() {
-		return medicineId;
-	}
-
-	public void setMedicineId(String medicineId) {
-		this.medicineId = medicineId;
+	public void setBillingId(BillingId billingId) {
+		this.billingId = billingId;
 	}
 
 	public Integer getQuantity() {

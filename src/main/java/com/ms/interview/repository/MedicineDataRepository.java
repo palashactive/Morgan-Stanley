@@ -14,4 +14,5 @@ public interface MedicineDataRepository extends CrudRepository<MedicineData, Str
 	List<MedicineData> findByName(String name);
 	List<MedicineData> findByGenericName(String genericName);
 	List<MedicineData> findByCategory(String category);
+	MedicineData findByNameAndManufacturer(String name, String manufacturer);
 }

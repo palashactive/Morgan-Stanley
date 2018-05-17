@@ -28,7 +28,7 @@ public class MedicineDataServiceImpl implements MedicineDataService {
 	}
 
 	@Override
-	public Iterable<MedicineData> setup(List<MedicineData> medicineDataList) {
+	public Iterable<MedicineData> saveAll(List<MedicineData> medicineDataList) {
 
 		return medicineDataRepository.save(medicineDataList);
 	}
@@ -55,5 +55,11 @@ public class MedicineDataServiceImpl implements MedicineDataService {
 		}
 
 		return null;
+	}
+	
+	@Override
+	public MedicineData getMedicineByBrandName(MedicineData medicineData) {
+		
+		return medicineDataRepository.findByNameAndManufacturer(medicineData.getName(), medicineData.getManufacturer());
 	}
 }
