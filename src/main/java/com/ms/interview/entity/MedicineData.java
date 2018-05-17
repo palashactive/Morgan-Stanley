@@ -3,8 +3,6 @@ package com.ms.interview.entity;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,8 +10,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity // This tells Hibernate to make a table out of this class
 public class MedicineData {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
+    private String id;
 
     private String name;
 
@@ -30,11 +27,11 @@ public class MedicineData {
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
     private Date expiryDate;
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
