@@ -1,8 +1,8 @@
-package com.thoughtworks.test.repository;
+package com.ms.interview.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.thoughtworks.test.entity.User1;
+import com.ms.interview.entity.User1;
 
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
 // CRUD refers Create, Read, Update, Delete

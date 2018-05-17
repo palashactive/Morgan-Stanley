@@ -1,4 +1,4 @@
-package com.thoughtworks.test.entity;
+package com.ms.interview.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
