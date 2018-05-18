@@ -31,10 +31,13 @@ public class MainController {
 
 	@Autowired
 	InvoiceService invoiceService;
-	
+
 	@Autowired
 	BillingService billingService;
 
+	/**
+	 * Add or update Medicine
+	 */
 	@PostMapping(path = "/add")
 	public @ResponseBody String addNewMedicine(@RequestBody MedicineData medicineData) {
 
@@ -45,6 +48,9 @@ public class MainController {
 			return "Error";
 	}
 
+	/**
+	 * Buy Medicines
+	 */
 	@PostMapping(path = "/buy")
 	public @ResponseBody Invoice buyMedicine(@RequestBody List<MedicineData> buyMedicineData) {
 
@@ -59,12 +65,14 @@ public class MainController {
 
 			if (medicineDataDB != null) {
 
+				// Check if stock is present
 				if (medicineDataDB.getQuantity() >= medData.getQuantity()) {
 					buySuccess = true;
 					medicineDataDB.setQuantity(medicineDataDB.getQuantity() - medData.getQuantity());
 					billingAmt += medData.getQuantity() * medicineDataDB.getPrice();
 					updatedMedicineDataList.add(medicineDataDB);
 
+					// Do the billing
 					Billing billing = new Billing();
 					billing.setBillingId(new BillingId("", medicineDataDB.getId()));
 					billing.setQuantity(medData.getQuantity());
@@ -82,62 +90,84 @@ public class MainController {
 			}
 		}
 
+		// if all medicines bought
 		if (buySuccess) {
 
 			Invoice invoice = new Invoice();
 			invoice.setInvoiceNo(UUID.randomUUID().toString());
 			invoice.setInvoiceDate(new Date());
 			invoice.setBillingAmount(billingAmt);
-			
-			medicineBilling.stream().forEach(bill->{
-				
+
+			medicineBilling.stream().forEach(bill -> {
+
 				BillingId billId = bill.getBillingId();
 				billId.setInvoiceNo(invoice.getInvoiceNo());
 				bill.setBillingId(billId);
 			});
-			//invoice.setMedicineBilling(medicineBilling);
-			
+			// invoice.setMedicineBilling(medicineBilling);
+
 			invoiceService.saveInvoice(invoice);
 			billingService.saveBill(medicineBilling);
 			medicineDataService.saveAll(updatedMedicineDataList);
-			
+
 			return invoice;
 		} else {
 			return null;
 		}
 	}
 
+	/**
+	 * Setup initial medicine data
+	 */
 	@PostMapping(path = "/setup")
 	public @ResponseBody Iterable<MedicineData> setup(@RequestBody List<MedicineData> setupData) {
 
 		return medicineDataService.saveAll(setupData);
 	}
 
+	/**
+	 * Get all medicine details
+	 */
 	@GetMapping(path = "/all")
 	public @ResponseBody Iterable<MedicineData> getAllMedicines() {
 		return medicineDataService.getAllMedicine();
 	}
-	
+
+	/**
+	 * Get Billing history from Invoice
+	 */
 	@GetMapping(path = "/getBillingHistory")
 	public @ResponseBody Iterable<Billing> getAllBills(@RequestParam String invoiceNo) {
 		return billingService.getBillingHistory(invoiceNo);
 	}
-	
+
+	/**
+	 * Get top 10 sold medicines
+	 */
 	@GetMapping(path = "/getTopMedicines")
 	public @ResponseBody List<String> getTopMedicines() {
 		return billingService.getTopMedicines();
 	}
 
+	/**
+	 * Search medicines by Name
+	 */
 	@GetMapping(path = "/getMedicineByName")
 	public @ResponseBody List<MedicineData> getMedicinesByName(@RequestParam String name) {
 		return medicineDataService.getMedicines(name, "Name");
 	}
 
+	/**
+	 * Search medicines by Generic Name
+	 */
 	@GetMapping(path = "/getMedicineByGenericName")
 	public @ResponseBody List<MedicineData> getMedicinesByGenericName(@RequestParam String genericName) {
 		return medicineDataService.getMedicines(genericName, "GenericName");
 	}
 
+	/**
+	 * Search medicines by category
+	 */
 	@GetMapping(path = "/getMedicineByCategory")
 	public @ResponseBody List<MedicineData> getMedicinesByCategory(@RequestParam String category) {
 		return medicineDataService.getMedicines(category, "Category");
