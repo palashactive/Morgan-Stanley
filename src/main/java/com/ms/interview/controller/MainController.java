@@ -38,18 +38,18 @@ public class MainController {
 	/**
 	 * Add or update Medicine
 	 */
-	@PostMapping(path = "/add")
+	@PostMapping(path = "/addOrUpdateMedicine")
 	public @ResponseBody String addNewMedicine(@RequestBody MedicineData medicineData) {
 
 		MedicineData savedMedicine = medicineDataService.saveMedicine(medicineData);
 		if (savedMedicine != null)
-			return "Saved";
+			return "Saved medicine " + savedMedicine.getName();
 		else
-			return "Error";
+			return "Error saving medicine";
 	}
 
 	/**
-	 * Buy Medicines
+	 * Buy Medicines based on brand name
 	 */
 	@PostMapping(path = "/buy")
 	public @ResponseBody Invoice buyMedicine(@RequestBody List<MedicineData> buyMedicineData) {
@@ -104,7 +104,7 @@ public class MainController {
 				billId.setInvoiceNo(invoice.getInvoiceNo());
 				bill.setBillingId(billId);
 			});
-			// invoice.setMedicineBilling(medicineBilling);
+			//invoice.setMedicineBilling(medicineBilling);
 
 			invoiceService.saveInvoice(invoice);
 			billingService.saveBill(medicineBilling);
