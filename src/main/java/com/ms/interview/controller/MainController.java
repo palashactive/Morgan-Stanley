@@ -52,7 +52,7 @@ public class MainController {
 	 * Buy Medicines based on brand name
 	 */
 	@PostMapping(path = "/buy")
-	public @ResponseBody Invoice buyMedicine(@RequestBody List<MedicineData> buyMedicineData) {
+	public @ResponseBody String buyMedicine(@RequestBody List<MedicineData> buyMedicineData) {
 
 		List<Billing> medicineBilling = new ArrayList<>();
 		double billingAmt = 0;
@@ -110,9 +110,9 @@ public class MainController {
 			billingService.saveBill(medicineBilling);
 			medicineDataService.saveAll(updatedMedicineDataList);
 
-			return invoice;
+			return "Invoice No :" + invoice.getInvoiceNo() + " Billing Amount :" + invoice.getBillingAmount();
 		} else {
-			return null;
+			return "No invoice generated";
 		}
 	}
 
