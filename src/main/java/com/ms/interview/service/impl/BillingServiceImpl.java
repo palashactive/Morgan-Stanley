@@ -20,5 +20,9 @@ public class BillingServiceImpl implements BillingService {
 	
 		return billingRepository.save(medicineBilling);
 	}
-
+	
+	@Override
+	public List<Billing> getBillingHistory(String invoiceNo){
+		return billingRepository.findByBillingIdInvoiceNo(invoiceNo);
+	}
 }

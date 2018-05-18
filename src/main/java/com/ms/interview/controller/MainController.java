@@ -35,9 +35,6 @@ public class MainController {
 	
 	@Autowired
 	BillingService billingService;
-	
-	@Autowired
-	BillingRepository billingRepository;
 
 	@PostMapping(path = "/add")
 	public @ResponseBody String addNewMedicine(@RequestBody MedicineData medicineData) {
@@ -122,9 +119,9 @@ public class MainController {
 		return medicineDataService.getAllMedicine();
 	}
 	
-	@GetMapping(path = "/allBills")
-	public @ResponseBody Iterable<Billing> getAllBills() {
-		return billingRepository.findAll();
+	@GetMapping(path = "/getBillingHistory")
+	public @ResponseBody Iterable<Billing> getAllBills(@RequestParam String invoiceNo) {
+		return billingService.getBillingHistory(invoiceNo);
 	}
 
 	@GetMapping(path = "/getMedicineByName")
