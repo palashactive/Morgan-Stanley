@@ -18,7 +18,6 @@ import com.ms.interview.entity.Billing;
 import com.ms.interview.entity.BillingId;
 import com.ms.interview.entity.Invoice;
 import com.ms.interview.entity.MedicineData;
-import com.ms.interview.repository.BillingRepository;
 import com.ms.interview.service.BillingService;
 import com.ms.interview.service.InvoiceService;
 import com.ms.interview.service.MedicineDataService;
@@ -122,6 +121,11 @@ public class MainController {
 	@GetMapping(path = "/getBillingHistory")
 	public @ResponseBody Iterable<Billing> getAllBills(@RequestParam String invoiceNo) {
 		return billingService.getBillingHistory(invoiceNo);
+	}
+	
+	@GetMapping(path = "/getTopMedicines")
+	public @ResponseBody List<String> getTopMedicines() {
+		return billingService.getTopMedicines();
 	}
 
 	@GetMapping(path = "/getMedicineByName")
