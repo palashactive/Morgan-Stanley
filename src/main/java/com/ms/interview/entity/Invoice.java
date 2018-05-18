@@ -1,5 +1,6 @@
 package com.ms.interview.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,8 +18,8 @@ public class Invoice {
 	
 	private double billingAmount;
 	
-	/*@OneToMany(mappedBy="invoice")
-	private List<Billing> medicineBilling;*/
+	@OneToMany(mappedBy="invoice")
+	private List<Billing> medicineBilling = new ArrayList<>();
 
 	public String getInvoiceNo() {
 		return invoiceNo;
@@ -44,11 +45,11 @@ public class Invoice {
 		this.billingAmount = billingAmount;
 	}
 
-	/*public List<Billing> getMedicineBilling() {
+	public List<Billing> getMedicineBilling() {
 		return medicineBilling;
 	}
 
 	public void setMedicineBilling(List<Billing> medicineBilling) {
 		this.medicineBilling = medicineBilling;
-	}*/
+	}
 }

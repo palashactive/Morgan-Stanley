@@ -1,9 +1,12 @@
 package com.ms.interview.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -23,6 +26,9 @@ public class MedicineData {
     private String manufacturer;
     
     private Integer quantity;
+    
+    @OneToMany(mappedBy="medicineData")
+    private List<Billing> billingList = new ArrayList<>();
     
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
     private Date expiryDate;
