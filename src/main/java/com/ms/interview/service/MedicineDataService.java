@@ -7,7 +7,7 @@ import com.ms.interview.entity.MedicineData;
 public interface MedicineDataService {
 
 	// Get all medicines details
-	public Iterable<MedicineData> getAllMedicine();
+	public List<MedicineData> getAllMedicine();
 
 	// Get a medicine by its product Id
 	public MedicineData getMedicineById(String id);

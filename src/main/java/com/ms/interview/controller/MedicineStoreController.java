@@ -138,7 +138,7 @@ public class MedicineStoreController {
 	 * Get all medicine details
 	 */
 	@GetMapping(path = "/all")
-	public @ResponseBody Iterable<MedicineData> getAllMedicines() {
+	public @ResponseBody List<MedicineData> getAllMedicines() {
 		return medicineDataService.getAllMedicine();
 	}
 

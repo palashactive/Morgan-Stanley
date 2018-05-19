@@ -1,11 +1,7 @@
 package com.ms.interview.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Manufacturer {
@@ -16,9 +12,6 @@ public class Manufacturer {
 	private String manfacturerName;
 	
 	private boolean isBlocked;
-	
-	@OneToMany(mappedBy="medManufacturer")
-	List<MedicineData> medicineDataList = new ArrayList<>();
 
 	public String getManufacturerId() {
 		return manufacturerId;
@@ -42,13 +35,5 @@ public class Manufacturer {
 
 	public void setBlocked(boolean isBlocked) {
 		this.isBlocked = isBlocked;
-	}
-
-	public List<MedicineData> getMedicineDataList() {
-		return medicineDataList;
-	}
-
-	public void setMedicineDataList(List<MedicineData> medicineDataList) {
-		this.medicineDataList = medicineDataList;
 	}
 }

@@ -17,9 +17,11 @@ public class MedicineDataServiceImpl implements MedicineDataService {
 	private MedicineDataRepository medicineDataRepository;
 
 	@Override
-	public Iterable<MedicineData> getAllMedicine() {
+	public List<MedicineData> getAllMedicine() {
 
-		return medicineDataRepository.findAll();
+		List<MedicineData> medListAll = medicineDataRepository.findAll();
+		List<MedicineData> medByNameWhiteList = getWhiteListedMedicineList(medListAll);
+		return medByNameWhiteList;
 	}
 
 	@Override
@@ -46,22 +48,20 @@ public class MedicineDataServiceImpl implements MedicineDataService {
 		if (attribute.equals("Name")) {
 			
 			List<MedicineData> medListByName = medicineDataRepository.findByName(attributeValue);
-			List<MedicineData> medByNameWhiteList = new ArrayList<>();
-			for(MedicineData med : medListByName){
-				
-				MedicineData whiteListMed = getWhiteListedMedicines(med);
-				if(whiteListMed != null)
-					medByNameWhiteList.add(whiteListMed);
-			}
+			List<MedicineData> medByNameWhiteList = getWhiteListedMedicineList(medListByName);
 			return medByNameWhiteList;
 		}
 
 		else if (attribute.equals("GenericName")) {
-			return medicineDataRepository.findByGenericName(attributeValue);
+			List<MedicineData> medListByGenericName = medicineDataRepository.findByGenericName(attributeValue);
+			List<MedicineData> medByNameWhiteList = getWhiteListedMedicineList(medListByGenericName);
+			return medByNameWhiteList;
 		}
 
 		else if (attribute.equals("Category")) {
-			return medicineDataRepository.findByCategory(attributeValue);
+			List<MedicineData> medListByCategory = medicineDataRepository.findByCategory(attributeValue);
+			List<MedicineData> medByNameWhiteList = getWhiteListedMedicineList(medListByCategory);
+			return medByNameWhiteList;
 		}
 
 		return null;
@@ -74,6 +74,16 @@ public class MedicineDataServiceImpl implements MedicineDataService {
 		return whiteListMed;
 	}
 	
+	private List<MedicineData> getWhiteListedMedicineList(List<MedicineData> medList){
+		List<MedicineData> medByNameWhiteList = new ArrayList<>();
+		for(MedicineData med : medList){
+			
+			MedicineData whiteListMed = getWhiteListedMedicines(med);
+			if(whiteListMed != null)
+				medByNameWhiteList.add(whiteListMed);
+		}
+		return medByNameWhiteList;
+	}
 	private MedicineData getWhiteListedMedicines(MedicineData medData) {
 		
 		if(!medData.getMedManufacturer().isBlocked()) {
