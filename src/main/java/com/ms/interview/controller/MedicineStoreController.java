@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ms.interview.entity.Billing;
 import com.ms.interview.entity.BillingId;
 import com.ms.interview.entity.Invoice;
+import com.ms.interview.entity.Manufacturer;
 import com.ms.interview.entity.MedicineData;
+import com.ms.interview.repository.ManufacturerRepository;
 import com.ms.interview.service.BillingService;
 import com.ms.interview.service.InvoiceService;
+import com.ms.interview.service.ManufacturerService;
 import com.ms.interview.service.MedicineDataService;
 
 @Controller
@@ -34,6 +37,12 @@ public class MedicineStoreController {
 
 	@Autowired
 	BillingService billingService;
+	
+	@Autowired
+	ManufacturerService manufacturerService;
+	
+	@Autowired
+	ManufacturerRepository manuRepo;
 
 	/**
 	 * Add or update Medicine
@@ -171,5 +180,28 @@ public class MedicineStoreController {
 	@GetMapping(path = "/getMedicineByCategory")
 	public @ResponseBody List<MedicineData> getMedicinesByCategory(@RequestParam String category) {
 		return medicineDataService.getMedicines(category, "Category");
+	}
+	
+	/**
+	 * Block a manufacturer
+	 * */
+	@PostMapping(path = "/blockMaufacturer")
+	public @ResponseBody String blockMaufacturer(@RequestBody Manufacturer manufacturer) {
+
+		boolean success = manufacturerService.blackListManufacturer(manufacturer.getManufacturerId());
+		
+		if(success)
+			return "Successfully blacklisted Manufacturer : " + manufacturer.getManufacturerId();
+		else
+			return "Manufacturer doesn't exists";
+	}
+	
+	
+	@PostMapping(path = "/saveManufacturer")
+	public @ResponseBody String setup(@RequestBody Manufacturer manufacturer) {
+
+		manuRepo.save(manufacturer);
+		
+		return "Success";
 	}
 }

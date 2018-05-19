@@ -37,6 +37,7 @@ public class RestApiApplication {
 
 	    properties.put( "hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect" );
 	    properties.put( "hibernate.connection.driver_class", "org.postgresql.Driver" );
+	    properties.put( "hibernate.hbm2ddl.auto", "update" );
 
 	    return properties;
 	}

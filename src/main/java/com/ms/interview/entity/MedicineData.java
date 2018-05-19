@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -29,6 +31,10 @@ public class MedicineData {
     
     @OneToMany(mappedBy="medicineData")
     private List<Billing> billingList = new ArrayList<>();
+    
+    @ManyToOne
+    @JoinColumn(name = "manufacturer", referencedColumnName = "manufacturerId", insertable=false,updatable=false)
+    private Manufacturer medManufacturer;
     
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
     private Date expiryDate;
@@ -95,6 +101,22 @@ public class MedicineData {
 
 	public void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
+	}
+
+	public List<Billing> getBillingList() {
+		return billingList;
+	}
+
+	public void setBillingList(List<Billing> billingList) {
+		this.billingList = billingList;
+	}
+
+	public Manufacturer getMedManufacturer() {
+		return medManufacturer;
+	}
+
+	public void setMedManufacturer(Manufacturer medManufacturer) {
+		this.medManufacturer = medManufacturer;
 	}
 }
 

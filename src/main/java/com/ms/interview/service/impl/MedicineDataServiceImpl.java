@@ -1,5 +1,6 @@
 package com.ms.interview.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,16 @@ public class MedicineDataServiceImpl implements MedicineDataService {
 	public List<MedicineData> getMedicines(String attributeValue, String attribute) {
 
 		if (attribute.equals("Name")) {
-			return medicineDataRepository.findByName(attributeValue);
+			
+			List<MedicineData> medListByName = medicineDataRepository.findByName(attributeValue);
+			List<MedicineData> medByNameWhiteList = new ArrayList<>();
+			for(MedicineData med : medListByName){
+				
+				MedicineData whiteListMed = getWhiteListedMedicines(med);
+				if(whiteListMed != null)
+					medByNameWhiteList.add(whiteListMed);
+			}
+			return medByNameWhiteList;
 		}
 
 		else if (attribute.equals("GenericName")) {
@@ -59,7 +69,17 @@ public class MedicineDataServiceImpl implements MedicineDataService {
 	
 	@Override
 	public MedicineData getMedicineByBrandName(MedicineData medicineData) {
+		MedicineData medicineDb = medicineDataRepository.findByNameAndManufacturer(medicineData.getName(), medicineData.getManufacturer());
+		MedicineData whiteListMed = getWhiteListedMedicines(medicineDb);
+		return whiteListMed;
+	}
+	
+	private MedicineData getWhiteListedMedicines(MedicineData medData) {
 		
-		return medicineDataRepository.findByNameAndManufacturer(medicineData.getName(), medicineData.getManufacturer());
+		if(!medData.getMedManufacturer().isBlocked()) {
+			return medData;
+		}
+		else
+			return null;
 	}
 }
