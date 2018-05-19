@@ -29,9 +29,6 @@ public class MedicineData {
     
     private Integer quantity;
     
-    @OneToMany(mappedBy="medicineData")
-    private List<Billing> billingList = new ArrayList<>();
-    
     @ManyToOne
     @JoinColumn(name = "manufacturer", referencedColumnName = "manufacturerId", insertable=false,updatable=false)
     private Manufacturer medManufacturer;
@@ -101,14 +98,6 @@ public class MedicineData {
 
 	public void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
-	}
-
-	public List<Billing> getBillingList() {
-		return billingList;
-	}
-
-	public void setBillingList(List<Billing> billingList) {
-		this.billingList = billingList;
 	}
 
 	public Manufacturer getMedManufacturer() {
