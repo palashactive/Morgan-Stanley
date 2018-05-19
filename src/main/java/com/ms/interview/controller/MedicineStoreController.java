@@ -24,7 +24,7 @@ import com.ms.interview.service.MedicineDataService;
 
 @Controller
 @RequestMapping(path = "/test") // This means URL's start with /test (after Application path)
-public class MainController {
+public class MedicineStoreController {
 
 	@Autowired
 	MedicineDataService medicineDataService;
